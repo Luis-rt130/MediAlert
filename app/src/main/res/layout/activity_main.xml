@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:itemCount="3"
         tools:listitem="@layout/item_medicine" />
 
     <!-- Empty State Layout -->
@@ -37,7 +38,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <ImageView
             android:layout_width="120dp"
