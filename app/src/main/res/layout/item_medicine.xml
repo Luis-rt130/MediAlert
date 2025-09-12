@@ -38,7 +38,7 @@
             app:layout_constraintEnd_toStartOf="@id/text_view_medicine_time"
             app:layout_constraintStart_toEndOf="@id/icon_medicine"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Paracetamol 500mg" />
+            tools:text="Losartán 50mg" />
 
         <TextView
             android:id="@+id/text_view_medicine_details"
@@ -50,7 +50,7 @@
             app:layout_constraintStart_toStartOf="@id/text_view_medicine_name"
             app:layout_constraintTop_toBottomOf="@id/text_view_medicine_name"
             app:layout_constraintEnd_toEndOf="@id/text_view_medicine_name"
-            tools:text="1 pastilla - Dosis 2 de 3" />
+            tools:text="1 pastilla - Próxima" />
 
         <TextView
             android:id="@+id/text_view_medicine_time"
@@ -62,7 +62,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="21:00" />
+            tools:text="08:00" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
