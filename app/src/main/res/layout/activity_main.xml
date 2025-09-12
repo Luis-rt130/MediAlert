@@ -20,13 +20,29 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- This RecyclerView is for the real application. It's hidden in the preview -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_medicines"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_medicine" />
+        tools:visibility="gone" />
+
+    <!-- This LinearLayout is ONLY for the design preview to show varied items -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:visibility="visible">
+
+        <include layout="@layout/item_preview_losartan" />
+        <include layout="@layout/item_preview_ibuprofeno" />
+        <include layout="@layout/item_preview_paracetamol" />
+
+    </LinearLayout>
+
 
     <!-- Empty State Layout -->
     <LinearLayout
@@ -43,9 +59,9 @@
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
+            android:contentDescription="No hay medicamentos"
             android:src="@android:drawable/ic_menu_add"
-            app:tint="?attr/colorPrimary"
-            android:contentDescription="No hay medicamentos"/>
+            app:tint="?attr/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
