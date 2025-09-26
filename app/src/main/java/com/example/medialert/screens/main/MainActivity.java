@@ -33,37 +33,51 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Inicializar vistas
-        welcomeStateLayout = findViewById(R.id.welcome_state_layout);
-        emptyStateLayout = findViewById(R.id.empty_state_layout);
-        fab = findViewById(R.id.fab_add_medicine);
+        try {
+            welcomeStateLayout = findViewById(R.id.welcome_state_layout);
+            emptyStateLayout = findViewById(R.id.empty_state_layout);
+            fab = findViewById(R.id.fab_add_medicine);
 
-        // Verificar que las vistas se encontraron correctamente
-        if (welcomeStateLayout == null || emptyStateLayout == null || fab == null) {
-            throw new RuntimeException("No se pudieron encontrar las vistas necesarias en el layout");
+            fab.setOnClickListener(view -> {
+                Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
+                startActivity(intent);
+            });
+
+            // Mostrar estado de bienvenida por defecto
+            if (welcomeStateLayout != null && emptyStateLayout != null) {
+                showWelcomeState();
+            }
+        } catch (Exception e) {
+            // Si hay error con los layouts, continuar sin ellos
+            fab = findViewById(R.id.fab_add_medicine);
+            if (fab != null) {
+                fab.setOnClickListener(view -> {
+                    Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
+                    startActivity(intent);
+                });
+            }
         }
-
-        fab.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
-            startActivity(intent);
-        });
-
-        // Mostrar estado de bienvenida por defecto
-        showWelcomeState();
     }
 
     private void showWelcomeState() {
-        welcomeStateLayout.setVisibility(LinearLayout.VISIBLE);
-        emptyStateLayout.setVisibility(LinearLayout.GONE);
+        if (welcomeStateLayout != null && emptyStateLayout != null) {
+            welcomeStateLayout.setVisibility(LinearLayout.VISIBLE);
+            emptyStateLayout.setVisibility(LinearLayout.GONE);
+        }
     }
 
     private void showEmptyState() {
-        welcomeStateLayout.setVisibility(LinearLayout.GONE);
-        emptyStateLayout.setVisibility(LinearLayout.VISIBLE);
+        if (welcomeStateLayout != null && emptyStateLayout != null) {
+            welcomeStateLayout.setVisibility(LinearLayout.GONE);
+            emptyStateLayout.setVisibility(LinearLayout.VISIBLE);
+        }
     }
 
     private void showMedicineList() {
-        welcomeStateLayout.setVisibility(LinearLayout.GONE);
-        emptyStateLayout.setVisibility(LinearLayout.GONE);
+        if (welcomeStateLayout != null && emptyStateLayout != null) {
+            welcomeStateLayout.setVisibility(LinearLayout.GONE);
+            emptyStateLayout.setVisibility(LinearLayout.GONE);
+        }
         // TODO: Mostrar RecyclerView con medicamentos
     }
 

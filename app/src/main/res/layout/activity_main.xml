@@ -69,7 +69,7 @@
             android:text="¡Bienvenido a MediAlert!"
             android:textAppearance="?attr/textAppearanceHeadline5"
             android:textStyle="bold"
-            android:textColor="@color/primary"
+            android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="16dp" />
 
         <TextView
@@ -78,7 +78,7 @@
             android:text="Tu asistente personal para recordarte tomar tus medicamentos a tiempo."
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceBody1"
-            android:textColor="@color/on_surface_variant"
+            android:textColor="?android:attr/textColorSecondary"
             android:layout_marginBottom="24dp" />
 
         <com.google.android.material.card.MaterialCardView
@@ -87,8 +87,8 @@
             android:layout_marginBottom="24dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/surface_variant"
-            app:strokeColor="@color/border_light"
+            app:cardBackgroundColor="?attr/colorSurfaceVariant"
+            app:strokeColor="?attr/colorOutline"
             app:strokeWidth="1dp">
 
             <LinearLayout
@@ -192,7 +192,7 @@
             android:text="💡 Consejo: Puedes acceder a tu perfil tocando el ícono en la barra superior"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="@color/on_surface_variant"
+            android:textColor="?android:attr/textColorSecondary"
             android:background="@drawable/tip_background"
             android:padding="16dp" />
 
@@ -215,7 +215,7 @@
             android:layout_height="120dp"
             android:contentDescription="No hay medicamentos"
             android:src="@android:drawable/ic_menu_add"
-            app:tint="@color/primary" />
+            app:tint="?attr/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"

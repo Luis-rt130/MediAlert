@@ -14,7 +14,7 @@
         android:layout_height="48dp"
         android:src="@android:drawable/ic_menu_revert"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:tint="@color/primary"
+        android:tint="?attr/colorPrimary"
         android:contentDescription="@string/tooltip_back"
         android:layout_gravity="start"
         android:layout_marginTop="8dp" />
