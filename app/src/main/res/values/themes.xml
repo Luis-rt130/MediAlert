@@ -1,9 +1,99 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MediAlert" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary Colors -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        
+        <!-- Secondary Colors -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+        
+        <!-- Surface Colors -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+        
+        <!-- Background Colors -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
+        
+        <!-- Error Colors -->
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+        
+        <!-- Outline Colors -->
+        <item name="colorOutline">@color/border_light</item>
+        <item name="colorOutlineVariant">@color/border_medium</item>
+        
+        <!-- Status Bar -->
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        
+        <!-- Navigation Bar -->
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        
+        <!-- Typography -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MediAlert.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MediAlert.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MediAlert.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MediAlert.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MediAlert.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MediAlert.Headline6</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MediAlert.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MediAlert.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MediAlert.Caption</item>
     </style>
 
     <style name="Theme.MediAlert" parent="Base.Theme.MediAlert" />
+    
+    <!-- Typography Styles -->
+    <style name="TextAppearance.MediAlert.Headline1" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Headline2" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Headline3" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Headline4" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Headline5" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Headline6" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Body1" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Body2" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/on_surface_variant</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/on_surface_variant</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
 </resources>

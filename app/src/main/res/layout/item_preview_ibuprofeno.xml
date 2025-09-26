@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="Icono de medicamento"
-            app:tint="?attr/colorPrimary"/>
+            app:tint="@color/primary"/>
 
         <TextView
             android:id="@+id/text_view_medicine_name"

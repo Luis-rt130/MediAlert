@@ -1,7 +1,97 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Base application theme for dark mode. -->
     <style name="Base.Theme.MediAlert" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary Colors (Dark Mode) -->
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorPrimaryVariant">@color/secondary_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <!-- Secondary Colors (Dark Mode) -->
+        <item name="colorSecondary">@color/accent_teal</item>
+        <item name="colorSecondaryVariant">@color/accent_purple</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <!-- Surface Colors (Dark Mode) -->
+        <item name="colorSurface">@color/neutral_800</item>
+        <item name="colorSurfaceVariant">@color/neutral_700</item>
+        <item name="colorOnSurface">@color/neutral_100</item>
+        <item name="colorOnSurfaceVariant">@color/neutral_300</item>
+        
+        <!-- Background Colors (Dark Mode) -->
+        <item name="android:colorBackground">@color/neutral_900</item>
+        <item name="colorOnBackground">@color/neutral_100</item>
+        
+        <!-- Error Colors -->
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/white</item>
+        
+        <!-- Outline Colors (Dark Mode) -->
+        <item name="colorOutline">@color/neutral_600</item>
+        <item name="colorOutlineVariant">@color/neutral_500</item>
+        
+        <!-- Status Bar (Dark Mode) -->
+        <item name="android:statusBarColor">@color/neutral_900</item>
+        <item name="android:windowLightStatusBar">false</item>
+        
+        <!-- Navigation Bar (Dark Mode) -->
+        <item name="android:navigationBarColor">@color/neutral_900</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        
+        <!-- Typography (Dark Mode) -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MediAlert.Dark.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MediAlert.Dark.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MediAlert.Dark.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MediAlert.Dark.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MediAlert.Dark.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MediAlert.Dark.Headline6</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MediAlert.Dark.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MediAlert.Dark.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MediAlert.Dark.Caption</item>
+    </style>
+    
+    <!-- Typography Styles for Dark Mode -->
+    <style name="TextAppearance.MediAlert.Dark.Headline1" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">@color/neutral_100</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Headline2" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/neutral_100</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Headline3" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/neutral_100</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Headline4" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/neutral_100</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Headline5" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/neutral_100</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Headline6" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textColor">@color/neutral_100</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Body1" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/neutral_200</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Body2" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/neutral_300</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.MediAlert.Dark.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/neutral_400</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 </resources>

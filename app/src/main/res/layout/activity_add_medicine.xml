@@ -23,6 +23,7 @@
         android:layout_height="48dp"
         android:src="@android:drawable/ic_menu_revert"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:tint="@color/primary"
         android:contentDescription="@string/tooltip_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

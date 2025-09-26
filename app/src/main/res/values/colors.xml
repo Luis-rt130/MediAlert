@@ -1,5 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Minimalist Color Palette -->
+    <!-- Primary Colors -->
+    <color name="primary">#FF2C3E50</color>           <!-- Deep Navy Blue -->
+    <color name="primary_variant">#FF34495E</color>   <!-- Lighter Navy -->
+    <color name="secondary">#FF3498DB</color>         <!-- Soft Blue -->
+    <color name="secondary_variant">#FF5DADE2</color> <!-- Light Blue -->
+    
+    <!-- Surface Colors -->
+    <color name="surface">#FFF8F9FA</color>           <!-- Off White -->
+    <color name="surface_variant">#FFE8ECEF</color>   <!-- Light Gray -->
+    <color name="background">#FFFFFFFF</color>        <!-- Pure White -->
+    <color name="background_secondary">#FFF5F6F7</color> <!-- Subtle Gray -->
+    
+    <!-- Text Colors -->
+    <color name="on_primary">#FFFFFFFF</color>        <!-- White on Primary -->
+    <color name="on_secondary">#FFFFFFFF</color>      <!-- White on Secondary -->
+    <color name="on_surface">#FF2C3E50</color>        <!-- Navy on Surface -->
+    <color name="on_surface_variant">#FF5A6C7D</color> <!-- Muted Navy -->
+    <color name="on_background">#FF2C3E50</color>     <!-- Navy on Background -->
+    
+    <!-- State Colors -->
+    <color name="success">#FF27AE60</color>           <!-- Green -->
+    <color name="warning">#FFF39C12</color>           <!-- Orange -->
+    <color name="error">#FFE74C3C</color>             <!-- Red -->
+    <color name="info">#FF3498DB</color>              <!-- Blue -->
+    
+    <!-- Neutral Colors -->
+    <color name="neutral_100">#FFFFFFFF</color>       <!-- Pure White -->
+    <color name="neutral_200">#FFF8F9FA</color>       <!-- Off White -->
+    <color name="neutral_300">#FFE8ECEF</color>       <!-- Light Gray -->
+    <color name="neutral_400">#FFBDC3C7</color>       <!-- Medium Gray -->
+    <color name="neutral_500">#FF95A5A6</color>       <!-- Gray -->
+    <color name="neutral_600">#FF7F8C8D</color>       <!-- Dark Gray -->
+    <color name="neutral_700">#FF5A6C7D</color>       <!-- Darker Gray -->
+    <color name="neutral_800">#FF34495E</color>       <!-- Very Dark Gray -->
+    <color name="neutral_900">#FF2C3E50</color>       <!-- Navy -->
+    
+    <!-- Accent Colors -->
+    <color name="accent_blue">#FF3498DB</color>       <!-- Soft Blue -->
+    <color name="accent_teal">#FF1ABC9C</color>       <!-- Teal -->
+    <color name="accent_purple">#FF9B59B6</color>     <!-- Purple -->
+    
+    <!-- Overlay Colors -->
+    <color name="overlay_light">#1AFFFFFF</color>     <!-- Light Overlay -->
+    <color name="overlay_dark">#80000000</color>      <!-- Dark Overlay -->
+    
+    <!-- Border Colors -->
+    <color name="border_light">#FFE8ECEF</color>      <!-- Light Border -->
+    <color name="border_medium">#FFBDC3C7</color>     <!-- Medium Border -->
+    <color name="border_dark">#FF5A6C7D</color>       <!-- Dark Border -->
 </resources>

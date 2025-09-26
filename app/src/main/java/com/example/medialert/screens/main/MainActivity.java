@@ -1,6 +1,7 @@
 package com.example.medialert.screens.main;
 
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
+    private LinearLayout welcomeStateLayout;
+    private LinearLayout emptyStateLayout;
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,11 +32,33 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab_add_medicine);
+        welcomeStateLayout = findViewById(R.id.welcome_state_layout);
+        emptyStateLayout = findViewById(R.id.empty_state_layout);
+        fab = findViewById(R.id.fab_add_medicine);
+
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
             startActivity(intent);
         });
+
+        // Mostrar estado de bienvenida por defecto
+        showWelcomeState();
+    }
+
+    private void showWelcomeState() {
+        welcomeStateLayout.setVisibility(LinearLayout.VISIBLE);
+        emptyStateLayout.setVisibility(LinearLayout.GONE);
+    }
+
+    private void showEmptyState() {
+        welcomeStateLayout.setVisibility(LinearLayout.GONE);
+        emptyStateLayout.setVisibility(LinearLayout.VISIBLE);
+    }
+
+    private void showMedicineList() {
+        welcomeStateLayout.setVisibility(LinearLayout.GONE);
+        emptyStateLayout.setVisibility(LinearLayout.GONE);
+        // TODO: Mostrar RecyclerView con medicamentos
     }
 
     @Override
