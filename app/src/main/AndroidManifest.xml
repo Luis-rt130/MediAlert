@@ -26,6 +26,9 @@
         <activity
             android:name=".screens.addmedicine.AddMedicineActivity"
             android:label="Añadir Medicamento" />
+        <activity
+            android:name=".screens.profile.ProfileActivity"
+            android:label="@string/profile_title" />
     </application>
 
 </manifest>
