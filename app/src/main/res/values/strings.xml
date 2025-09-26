@@ -3,4 +3,17 @@
     <string name="profile_title">Perfil</string>
     <string name="logout">Cerrar sesión</string>
     <string name="profile_avatar_cd">Avatar de usuario</string>
+    
+    <!-- Tooltips / Content Descriptions -->
+    <string name="tooltip_login">Iniciar sesión en la aplicación</string>
+    <string name="tooltip_register">Crear nueva cuenta de usuario</string>
+    <string name="tooltip_forgot_password">Recuperar contraseña olvidada</string>
+    <string name="tooltip_add_medicine">Agregar nuevo medicamento</string>
+    <string name="tooltip_save_medicine">Guardar medicamento</string>
+    <string name="tooltip_cancel_medicine">Cancelar y volver sin guardar</string>
+    <string name="tooltip_logout">Cerrar sesión y volver al login</string>
+    <string name="tooltip_profile">Ver perfil de usuario</string>
+    <string name="tooltip_back">Volver a la pantalla anterior</string>
+    <string name="tooltip_time_picker">Seleccionar hora de medicamento</string>
+    <string name="tooltip_frequency_dropdown">Elegir frecuencia de medicamento</string>
 </resources>

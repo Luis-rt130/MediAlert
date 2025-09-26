@@ -4,6 +4,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 
 import androidx.activity.EdgeToEdge;
@@ -22,6 +23,7 @@ public class AddMedicineActivity extends AppCompatActivity {
 
     private TextInputEditText timeEditText;
     private AutoCompleteTextView frequencyEditText;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +38,11 @@ public class AddMedicineActivity extends AppCompatActivity {
 
         timeEditText = findViewById(R.id.edit_medicine_time);
         frequencyEditText = findViewById(R.id.edit_medicine_frequency);
+        backButton = findViewById(R.id.button_back);
 
         setupFrequencyDropdown();
         setupTimePicker();
+        setupBackButton();
     }
 
     private void setupFrequencyDropdown() {
@@ -61,6 +65,12 @@ public class AddMedicineActivity extends AppCompatActivity {
             }, hour, minute, true); // true for 24-hour format
 
             timePickerDialog.show();
+        });
+    }
+
+    private void setupBackButton() {
+        backButton.setOnClickListener(v -> {
+            finish(); // Volver a la pantalla anterior
         });
     }
 }

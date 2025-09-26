@@ -3,6 +3,7 @@ package com.example.medialert.screens.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -30,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
         TextView nameText = findViewById(R.id.text_user_name);
         TextView emailText = findViewById(R.id.text_user_email);
         Button logoutButton = findViewById(R.id.button_logout);
+        ImageButton backButton = findViewById(R.id.button_back);
 
         // Placeholder user data (replace with real user data source when available)
         nameText.setText("Juan Pérez");
@@ -40,6 +42,10 @@ public class ProfileActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
+        });
+
+        backButton.setOnClickListener(v -> {
+            finish(); // Volver a la pantalla anterior
         });
     }
 }

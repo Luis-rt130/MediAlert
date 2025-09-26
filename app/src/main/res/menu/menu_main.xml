@@ -5,6 +5,7 @@
         android:id="@+id/action_profile"
         android:title="@string/profile_title"
         android:icon="@android:drawable/ic_menu_myplaces"
+        android:contentDescription="@string/tooltip_profile"
         app:showAsAction="ifRoom" />
 </menu>
 
