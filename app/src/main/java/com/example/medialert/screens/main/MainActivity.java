@@ -32,9 +32,15 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Inicializar vistas
         welcomeStateLayout = findViewById(R.id.welcome_state_layout);
         emptyStateLayout = findViewById(R.id.empty_state_layout);
         fab = findViewById(R.id.fab_add_medicine);
+
+        // Verificar que las vistas se encontraron correctamente
+        if (welcomeStateLayout == null || emptyStateLayout == null || fab == null) {
+            throw new RuntimeException("No se pudieron encontrar las vistas necesarias en el layout");
+        }
 
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
