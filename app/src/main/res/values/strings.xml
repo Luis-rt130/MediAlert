@@ -80,4 +80,10 @@
     <string name="auth_error_login_failed">Error al iniciar sesión</string>
     <string name="auth_error_register_failed">Error al crear cuenta</string>
     <string name="auth_error_generic">Ocurrió un error. Intenta nuevamente</string>
+    
+    <!-- Main Screen Location -->
+    <string name="main_location_prefix">Estás en:</string>
+    <string name="main_location_detecting">Detectando ubicación…</string>
+    <string name="main_location_unavailable">Ubicación no disponible</string>
+    <string name="main_location_auto">Detectado automáticamente</string>
 </resources>
