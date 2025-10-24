@@ -16,4 +16,21 @@
     <string name="tooltip_back">Volver a la pantalla anterior</string>
     <string name="tooltip_time_picker">Seleccionar hora de medicamento</string>
     <string name="tooltip_frequency_dropdown">Elegir frecuencia de medicamento</string>
+    <string name="tooltip_location">Ver ubicación actual</string>
+    
+    <!-- Location Screen -->
+    <string name="location_title">Mi Ubicación</string>
+    <string name="location_current">Ubicación Actual</string>
+    <string name="location_latitude">Latitud</string>
+    <string name="location_longitude">Longitud</string>
+    <string name="location_accuracy">Precisión</string>
+    <string name="location_no_permission">No se tienen permisos de ubicación</string>
+    <string name="location_permission_required">Se requieren permisos de ubicación para continuar</string>
+    <string name="location_grant_permission">Conceder Permisos</string>
+    <string name="location_obtaining">Obteniendo ubicación…</string>
+    <string name="location_unavailable">Ubicación no disponible</string>
+    <string name="location_error">Error al obtener ubicación</string>
+    <string name="location_gps_disabled">GPS desactivado</string>
+    <string name="location_enable_gps">Habilitar GPS</string>
+    <string name="location_meters">metros</string>
 </resources>

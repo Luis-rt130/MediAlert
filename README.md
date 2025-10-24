@@ -43,6 +43,13 @@ MediAlert es una aplicación móvil desarrollada en Android que permite a los us
   - Horarios de administración
   - Estado de próxima dosis
 
+### 📍 Ubicación GPS
+- **Visualización en tiempo real**: Mapa interactivo con ubicación del dispositivo
+- **Información detallada**: Latitud, longitud y precisión
+- **Manejo robusto de permisos**: Solicitud inteligente y guiada
+- **Detección de errores**: Notificaciones cuando GPS está deshabilitado
+- **Actualizaciones automáticas**: Ubicación actualizada cada 5 segundos
+
 ### 🎨 Interfaz de Usuario
 - **Material Design 3**: Diseño moderno y consistente
 - **Tema adaptable**: Soporte para modo claro y oscuro
@@ -75,12 +82,23 @@ MediAlert es una aplicación móvil desarrollada en Android que permite a los us
 - Información personal (nombre y email)
 - Botón de cerrar sesión
 
+### Pantalla de Ubicación GPS
+- Mapa interactivo de Google Maps
+- Marcador en la ubicación actual del dispositivo
+- Card con información de coordenadas (latitud, longitud)
+- Indicador de precisión de la ubicación
+- Manejo de estados (permisos, carga, errores)
+
 ## 🔧 Requisitos del Sistema
 
 - **Android**: Versión 7.0 (API 24) o superior
 - **RAM**: Mínimo 2GB recomendado
 - **Almacenamiento**: 50MB de espacio libre
-- **Permisos**: Acceso a notificaciones para recordatorios
+- **Permisos**: 
+  - Acceso a notificaciones para recordatorios
+  - Acceso a ubicación (GPS) para funcionalidad de mapa
+  - Internet para visualización de mapas
+- **Google Play Services**: Requerido para funcionalidad de GPS/Maps
 
 ## 📦 Instalación
 
@@ -101,7 +119,13 @@ MediAlert es una aplicación móvil desarrollada en Android que permite a los us
    - Android Studio sincronizará automáticamente las dependencias
    - O ejecutar: `./gradlew build`
 
-4. **Ejecutar la aplicación**:
+4. **Configurar Google Maps API Key**:
+   - Obtén una API Key de [Google Cloud Console](https://console.cloud.google.com/)
+   - Habilita "Maps SDK for Android"
+   - Edita `app/src/main/AndroidManifest.xml` y reemplaza `YOUR_API_KEY_HERE` con tu key
+   - Ver guía completa en [CONFIGURACION_GPS.md](CONFIGURACION_GPS.md)
+
+5. **Ejecutar la aplicación**:
    - Conectar dispositivo Android o iniciar emulador
    - Hacer clic en "Run" o presionar Shift+F10
 
@@ -140,7 +164,13 @@ MediAlert es una aplicación móvil desarrollada en Android que permite a los us
    - Tocar el botón "+" flotante
    - Completar formulario y guardar
 
-3. **Gestionar Perfil**:
+3. **Ver Ubicación**:
+   - Tocar el ícono de mapa (📍) en la barra superior
+   - Conceder permisos de ubicación cuando se solicite
+   - Visualizar ubicación actual en el mapa
+   - Ver coordenadas y precisión en tiempo real
+
+4. **Gestionar Perfil**:
    - Tocar el ícono de perfil en la barra superior
    - Ver información personal
    - Cerrar sesión si es necesario
@@ -155,6 +185,7 @@ app/
 │   │       ├── login/           # Autenticación
 │   │       ├── main/            # Pantalla principal
 │   │       ├── addmedicine/     # Agregar medicamentos
+│   │       ├── location/        # Ubicación GPS
 │   │       └── profile/         # Perfil de usuario
 │   ├── res/
 │   │   ├── layout/              # Diseños XML
@@ -169,6 +200,7 @@ app/
 - **LoginActivity**: Manejo de autenticación
 - **MainActivity**: Lista principal de medicamentos
 - **AddMedicineActivity**: Formulario para agregar medicamentos
+- **LocationActivity**: Visualización de ubicación GPS en tiempo real
 - **ProfileActivity**: Gestión de perfil y logout
 
 ## 🛠️ Tecnologías Utilizadas
@@ -182,6 +214,8 @@ app/
   - Material Components
   - ConstraintLayout
   - Activity
+  - Google Play Services Location
+  - Google Play Services Maps
 
 ### Versiones
 
@@ -240,10 +274,12 @@ app/
 
 ### Roadmap
 
+- [x] **Ubicación GPS en tiempo real** ✅
 - [ ] Implementar base de datos local (Room)
 - [ ] Agregar notificaciones push
 - [ ] Sistema de autenticación real
 - [ ] Historial de medicamentos tomados
+- [ ] Geofencing para recordatorios basados en ubicación
 - [ ] Exportar/importar datos
 - [ ] Múltiples idiomas
 - [ ] Modo offline

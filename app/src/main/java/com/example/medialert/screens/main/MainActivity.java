@@ -89,8 +89,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        if (item.getItemId() == R.id.action_profile) {
+        int itemId = item.getItemId();
+        
+        if (itemId == R.id.action_profile) {
             Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.action_location) {
+            Intent intent = new Intent(this, com.example.medialert.screens.location.LocationActivity.class);
             startActivity(intent);
             return true;
         }
