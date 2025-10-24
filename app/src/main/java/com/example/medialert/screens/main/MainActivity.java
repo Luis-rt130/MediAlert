@@ -18,6 +18,8 @@ import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.example.medialert.R;
 import com.example.medialert.screens.addmedicine.AddMedicineActivity;
 import com.example.medialert.screens.login.LoginActivity;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout welcomeStateLayout;
     private LinearLayout emptyStateLayout;
     private FloatingActionButton fab;
+    private FloatingActionButton fabLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             });
 
+            // Configurar botón de logout
+            fabLogout = findViewById(R.id.fab_logout);
+            if (fabLogout != null) {
+                fabLogout.setOnClickListener(view -> showLogoutDialog());
+            }
+
             // Mostrar estado de bienvenida por defecto
             if (welcomeStateLayout != null && emptyStateLayout != null) {
                 showWelcomeState();
@@ -113,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
                     startActivity(intent);
                 });
+            }
+            
+            // Configurar botón de logout
+            fabLogout = findViewById(R.id.fab_logout);
+            if (fabLogout != null) {
+                fabLogout.setOnClickListener(view -> showLogoutDialog());
             }
         }
     }
@@ -175,6 +190,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Muestra diálogo de confirmación para cerrar sesión
+     */
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Estás seguro de que deseas cerrar sesión?")
+                .setPositiveButton("Cerrar sesión", (dialog, which) -> performLogout())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    /**
+     * Realiza el logout de Firebase
+     */
+    private void performLogout() {
+        if (mAuth != null) {
+            mAuth.signOut();
+            navigateToLogin();
+        }
+    }
+
+    /**
      * Navega a LoginActivity
      */
     private void navigateToLogin() {
@@ -220,8 +257,11 @@ public class MainActivity extends AppCompatActivity {
         // Verificar permisos
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) 
                 != PackageManager.PERMISSION_GRANTED) {
-            // No hay permisos, mostrar mensaje
-            locationText.setText(R.string.main_location_unavailable);
+            // Solicitar permisos en runtime
+            ActivityCompat.requestPermissions(this, 
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                                 Manifest.permission.ACCESS_FINE_LOCATION}, 
+                    LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
 
@@ -300,5 +340,26 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    /**
+     * Callback cuando el usuario responde a la solicitud de permisos
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, 
+                                          @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso concedido, intentar obtener ubicación nuevamente
+                getUserLocation();
+            } else {
+                // Permiso denegado
+                if (locationText != null) {
+                    locationText.setText(R.string.main_location_unavailable);
+                }
+            }
+        }
     }
 }

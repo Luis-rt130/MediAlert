@@ -300,4 +300,19 @@
         android:contentDescription="@string/tooltip_add_medicine"
         app:srcCompat="@android:drawable/ic_input_add" />
 
+    <!-- Botón de Logout en esquina superior derecha -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="16dp"
+        app:fabSize="mini"
+        app:backgroundTint="?attr/colorError"
+        android:contentDescription="Cerrar sesión"
+        app:srcCompat="@android:drawable/ic_lock_power_off"
+        app:elevation="4dp"
+        app:rippleColor="?attr/colorOnError" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
