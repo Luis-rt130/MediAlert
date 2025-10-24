@@ -37,6 +37,12 @@
         <activity
             android:name=".screens.location.LocationActivity"
             android:label="@string/location_title" />
+        <activity
+            android:name=".screens.login.RegisterActivity"
+            android:label="@string/register_title" />
+        <activity
+            android:name=".screens.login.ForgotPasswordActivity"
+            android:label="@string/forgot_password_title" />
 
         <!-- API Key de Google Maps - NOTA: El usuario debe reemplazar esto con su propia API Key -->
         <meta-data

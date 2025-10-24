@@ -2,8 +2,12 @@ package com.example.medialert.screens.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,8 +17,31 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.medialert.R;
 import com.example.medialert.screens.main.MainActivity;
+import com.example.medialert.utils.AuthUtils;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * Activity de inicio de sesión con Firebase Authentication
+ */
 public class LoginActivity extends AppCompatActivity {
+
+    // Firebase
+    private FirebaseAuth mAuth;
+
+    // UI Components
+    private TextInputLayout emailLayout;
+    private TextInputLayout passwordLayout;
+    private TextInputEditText emailInput;
+    private TextInputEditText passwordInput;
+    private Button loginButton;
+    private TextView forgotPasswordText;
+    private TextView registerText;
+    private ProgressBar progressBar;
+    private View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +54,142 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button loginButton = findViewById(R.id.button_login);
-        TextView forgotPasswordText = findViewById(R.id.text_forgot_password);
-        TextView registerText = findViewById(R.id.text_register);
+        // Inicializar Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
-        loginButton.setOnClickListener(v -> {
-            // For now, we'll just navigate to the main screen
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // Finish LoginActivity so the user can't go back to it
-        });
+        // Verificar si ya hay usuario logueado
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            // Usuario ya logueado, ir a MainActivity
+            navigateToMain();
+            return;
+        }
 
+        // Inicializar vistas
+        initializeViews();
+        setupClickListeners();
+    }
+
+    /**
+     * Inicializa todas las vistas
+     */
+    private void initializeViews() {
+        rootView = findViewById(android.R.id.content);
+        emailLayout = findViewById(R.id.layout_email);
+        passwordLayout = findViewById(R.id.layout_password);
+        emailInput = findViewById(R.id.edit_email);
+        passwordInput = findViewById(R.id.edit_password);
+        loginButton = findViewById(R.id.button_login);
+        forgotPasswordText = findViewById(R.id.text_forgot_password);
+        registerText = findViewById(R.id.text_register);
+        progressBar = findViewById(R.id.progress_bar);
+    }
+
+    /**
+     * Configura los listeners de clicks
+     */
+    private void setupClickListeners() {
+        loginButton.setOnClickListener(v -> performLogin());
+        
         forgotPasswordText.setOnClickListener(v -> {
-            // TODO: Implement forgot password functionality
-            // For now, just show a toast or navigate to forgot password screen
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
         });
 
         registerText.setOnClickListener(v -> {
-            // TODO: Implement registration functionality
-            // For now, just show a toast or navigate to registration screen
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
+    }
+
+    /**
+     * Realiza el login con Firebase
+     */
+    private void performLogin() {
+        // Limpiar errores previos
+        emailLayout.setError(null);
+        passwordLayout.setError(null);
+
+        // Obtener valores con protección contra null
+        String email = emailInput.getText() != null ? emailInput.getText().toString().trim() : "";
+        String password = passwordInput.getText() != null ? passwordInput.getText().toString().trim() : "";
+
+        // Validar campos
+        AuthUtils.ValidationResult validation = AuthUtils.validateLogin(email, password);
+        if (!validation.isValid()) {
+            showError(validation.getErrorMessage());
+            if (!AuthUtils.isValidEmail(email)) {
+                emailLayout.setError(validation.getErrorMessage());
+            } else if (TextUtils.isEmpty(password)) {
+                passwordLayout.setError(validation.getErrorMessage());
+            }
+            return;
+        }
+
+        // Mostrar loading
+        setLoading(true);
+
+        // Autenticar con Firebase
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    setLoading(false);
+
+                    if (task.isSuccessful()) {
+                        // Login exitoso
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            showSuccess("Bienvenido");
+                            navigateToMain();
+                        }
+                    } else {
+                        // Login fallido
+                        String errorMessage = AuthUtils.getFirebaseErrorMessage(task.getException());
+                        showError(errorMessage);
+                        passwordLayout.setError(" "); // Espacio para mostrar error visual
+                    }
+                });
+    }
+
+    /**
+     * Navega a MainActivity y limpia el stack
+     */
+    private void navigateToMain() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * Muestra/oculta loading state
+     */
+    private void setLoading(boolean isLoading) {
+        if (isLoading) {
+            progressBar.setVisibility(View.VISIBLE);
+            loginButton.setEnabled(false);
+            loginButton.setText(R.string.auth_logging_in);
+            emailInput.setEnabled(false);
+            passwordInput.setEnabled(false);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            loginButton.setEnabled(true);
+            loginButton.setText(R.string.auth_login_button);
+            emailInput.setEnabled(true);
+            passwordInput.setEnabled(true);
+        }
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void showError(String message) {
+        Snackbar.make(rootView, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    /**
+     * Muestra mensaje de éxito
+     */
+    private void showSuccess(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

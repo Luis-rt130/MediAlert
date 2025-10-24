@@ -11,11 +11,20 @@ import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
 import com.example.medialert.R;
 import com.example.medialert.screens.addmedicine.AddMedicineActivity;
+import com.example.medialert.screens.login.LoginActivity;
 import com.example.medialert.screens.profile.ProfileActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-
+/**
+ * Activity principal de la aplicación con gestión de sesiones de Firebase
+ */
 public class MainActivity extends AppCompatActivity {
+
+    // Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     private LinearLayout welcomeStateLayout;
     private LinearLayout emptyStateLayout;
@@ -24,6 +33,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Inicializar Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+        
+        // Verificar si hay usuario logueado
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            // No hay usuario logueado, redirigir a LoginActivity
+            navigateToLogin();
+            return;
+        }
+        
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -31,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        
+        // Configurar listener de estado de autenticación
+        setupAuthStateListener();
 
         // Inicializar vistas
         try {
@@ -101,5 +125,46 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Configura el listener de estado de autenticación
+     */
+    private void setupAuthStateListener() {
+        authStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user == null) {
+                // Usuario se deslogueó, volver a login
+                navigateToLogin();
+            }
+        };
+    }
+
+    /**
+     * Navega a LoginActivity
+     */
+    private void navigateToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Agregar listener de auth
+        if (authStateListener != null) {
+            mAuth.addAuthStateListener(authStateListener);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Remover listener de auth
+        if (authStateListener != null) {
+            mAuth.removeAuthStateListener(authStateListener);
+        }
     }
 }
