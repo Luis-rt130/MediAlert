@@ -11,8 +11,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,9 +143,13 @@ public class DatabaseManager {
             return;
         }
 
-        // Consultar medicamentos del usuario, activos, ordenados por fecha de creación
-        medicinesRef.whereEqualTo("userId", user.getUid())
-                .whereEqualTo("isActive", true)
+        // Base de la consulta (filtros por usuario y activo)
+        Query baseQuery = medicinesRef
+                .whereEqualTo("userId", user.getUid())
+                .whereEqualTo("isActive", true);
+
+        // Intento 1: con orderBy (requiere índice compuesto)
+        baseQuery
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -158,9 +165,40 @@ public class DatabaseManager {
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error al obtener medicamentos", e);
-                    if (listener != null) {
-                        listener.onFailure(e);
+                    // Si falla por índice faltante, reintentar sin orderBy y ordenar en cliente
+                    if (e instanceof FirebaseFirestoreException &&
+                            ((FirebaseFirestoreException) e).getCode() == FirebaseFirestoreException.Code.FAILED_PRECONDITION) {
+                        Log.w(TAG, "Índice compuesto faltante, reintentando sin orderBy. Detalle: " + e.getMessage());
+                        baseQuery.get()
+                                .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    List<Medicine> medicines = new ArrayList<>();
+                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                        Medicine medicine = document.toObject(Medicine.class);
+                                        medicine.setId(document.getId());
+                                        medicines.add(medicine);
+                                    }
+                                    // Ordenar por createdAt desc en cliente
+                                    Collections.sort(medicines, new Comparator<Medicine>() {
+                                        @Override
+                                        public int compare(Medicine o1, Medicine o2) {
+                                            return Long.compare(o2.getCreatedAt(), o1.getCreatedAt());
+                                        }
+                                    });
+                                    if (listener != null) {
+                                        listener.onSuccess(medicines);
+                                    }
+                                })
+                                .addOnFailureListener(e2 -> {
+                                    Log.e(TAG, "Error al obtener medicamentos (fallback)", e2);
+                                    if (listener != null) {
+                                        listener.onFailure(e2);
+                                    }
+                                });
+                    } else {
+                        Log.e(TAG, "Error al obtener medicamentos", e);
+                        if (listener != null) {
+                            listener.onFailure(e);
+                        }
                     }
                 });
     }
