@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         // Configurar long click listener para eliminar
         medicineAdapter.setOnMedicineLongClickListener(medicine -> {
             showDeleteMedicineDialog(medicine);
-            return true;
+            return;
         });
     }
     
