@@ -315,4 +315,19 @@
         app:elevation="4dp"
         app:rippleColor="?attr/colorOnError" />
 
+    <!-- Botón de Cámara en esquina inferior izquierda (pequeño, no intrusivo) -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        app:fabSize="mini"
+        app:backgroundTint="?attr/colorSecondaryContainer"
+        android:contentDescription="Abrir cámara"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:elevation="2dp"
+        app:rippleColor="?attr/colorOnSecondaryContainer" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.medialert.R;
+import com.example.medialert.utils.AppLogger;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -44,6 +45,8 @@ import com.google.android.material.card.MaterialCardView;
  * Implementa manejo robusto de permisos y errores
  */
 public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+    private static final String TAG = "LocationActivity";
 
     // Constants
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;

@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.medialert.R;
 import com.example.medialert.screens.login.LoginActivity;
+import com.example.medialert.utils.AppLogger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser;
  * Activity de perfil de usuario con datos de Firebase Authentication
  */
 public class ProfileActivity extends AppCompatActivity {
+
+    private static final String TAG = "ProfileActivity";
 
     // Firebase
     private FirebaseAuth mAuth;
@@ -37,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLogger.lifecycle(TAG, "onCreate");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.profile_root), (v, insets) -> {
@@ -47,6 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        AppLogger.d(TAG, "Firebase Auth inicializado");
 
         // Inicializar vistas
         nameText = findViewById(R.id.text_user_name);
@@ -58,9 +63,15 @@ public class ProfileActivity extends AppCompatActivity {
         loadUserData();
 
         // Setup listeners
-        logoutButton.setOnClickListener(v -> showLogoutConfirmationDialog());
+        logoutButton.setOnClickListener(v -> {
+            AppLogger.userEvent("Logout Button", "Usuario presionó botón logout en perfil");
+            showLogoutConfirmationDialog();
+        });
 
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> {
+            AppLogger.userEvent("Back Button", "Usuario regresa desde perfil");
+            finish();
+        });
     }
 
     /**

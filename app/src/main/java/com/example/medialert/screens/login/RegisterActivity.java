@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medialert.R;
 import com.example.medialert.screens.main.MainActivity;
+import com.example.medialert.utils.AppLogger;
 import com.example.medialert.utils.AuthUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,6 +25,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
  * Activity de registro de nuevos usuarios con Firebase Authentication
  */
 public class RegisterActivity extends AppCompatActivity {
+
+    private static final String TAG = "RegisterActivity";
 
     // Firebase
     private FirebaseAuth mAuth;
@@ -45,10 +48,12 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLogger.lifecycle(TAG, "onCreate");
         setContentView(R.layout.activity_register);
 
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        AppLogger.d(TAG, "Firebase Auth inicializado");
 
         // Inicializar vistas
         initializeViews();
@@ -80,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> performRegister());
         
         loginText.setOnClickListener(v -> {
+            AppLogger.userEvent("Back to Login", "Usuario vuelve a LoginActivity");
             finish(); // Volver a LoginActivity
         });
     }
@@ -88,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
      * Realiza el registro con Firebase
      */
     private void performRegister() {
+        AppLogger.userEvent("Register Attempt", "Usuario intenta registrarse");
         // Limpiar errores previos
         nameLayout.setError(null);
         emailLayout.setError(null);

@@ -16,12 +16,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.medialert.R;
+import com.example.medialert.utils.AppLogger;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
 import java.util.Locale;
 
 public class AddMedicineActivity extends AppCompatActivity {
+
+    private static final String TAG = "AddMedicineActivity";
 
     private TextInputEditText timeEditText;
     private AutoCompleteTextView frequencyEditText;
@@ -32,6 +35,7 @@ public class AddMedicineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLogger.lifecycle(TAG, "onCreate");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_medicine);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.add_medicine_layout), (v, insets) -> {

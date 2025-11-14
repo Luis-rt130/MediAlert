@@ -22,8 +22,10 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.medialert.R;
 import com.example.medialert.screens.addmedicine.AddMedicineActivity;
+import com.example.medialert.screens.camera.CameraActivity;
 import com.example.medialert.screens.login.LoginActivity;
 import com.example.medialert.screens.profile.ProfileActivity;
+import com.example.medialert.utils.AppLogger;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,6 +43,8 @@ import java.util.concurrent.Executors;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+
     // Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -56,21 +60,26 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout emptyStateLayout;
     private FloatingActionButton fab;
     private FloatingActionButton fabLogout;
+    private FloatingActionButton fabCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLogger.lifecycle(TAG, "onCreate");
         
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        AppLogger.d(TAG, "Firebase Auth inicializado");
         
         // Verificar si hay usuario logueado
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             // No hay usuario logueado, redirigir a LoginActivity
+            AppLogger.w(TAG, "No hay usuario logueado, redirigiendo a Login");
             navigateToLogin();
             return;
         }
+        AppLogger.i(TAG, "Usuario logueado: " + currentUser.getEmail());
         
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -96,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
             fab = findViewById(R.id.fab_add_medicine);
 
             fab.setOnClickListener(view -> {
+                AppLogger.userEvent("FAB Add Medicine", "Usuario presionó botón agregar medicamento");
                 Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
                 startActivity(intent);
             });
@@ -103,7 +113,20 @@ public class MainActivity extends AppCompatActivity {
             // Configurar botón de logout
             fabLogout = findViewById(R.id.fab_logout);
             if (fabLogout != null) {
-                fabLogout.setOnClickListener(view -> showLogoutDialog());
+                fabLogout.setOnClickListener(view -> {
+                    AppLogger.userEvent("FAB Logout", "Usuario presionó botón de logout");
+                    showLogoutDialog();
+                });
+            }
+
+            // Configurar botón de cámara (pequeño, no intrusivo)
+            fabCamera = findViewById(R.id.fab_camera);
+            if (fabCamera != null) {
+                fabCamera.setOnClickListener(view -> {
+                    AppLogger.userEvent("FAB Camera", "Usuario presionó botón de cámara");
+                    openCameraActivity();
+                });
+                AppLogger.d(TAG, "Botón de cámara configurado");
             }
 
             // Mostrar estado de bienvenida por defecto
@@ -127,12 +150,35 @@ public class MainActivity extends AppCompatActivity {
             // Configurar botón de logout
             fabLogout = findViewById(R.id.fab_logout);
             if (fabLogout != null) {
-                fabLogout.setOnClickListener(view -> showLogoutDialog());
+                fabLogout.setOnClickListener(view -> {
+                    AppLogger.userEvent("FAB Logout", "Usuario presionó botón de logout");
+                    showLogoutDialog();
+                });
+            }
+
+            // Configurar botón de cámara (pequeño, no intrusivo)
+            fabCamera = findViewById(R.id.fab_camera);
+            if (fabCamera != null) {
+                fabCamera.setOnClickListener(view -> {
+                    AppLogger.userEvent("FAB Camera", "Usuario presionó botón de cámara");
+                    openCameraActivity();
+                });
             }
         }
     }
 
+    /**
+     * Abre la Activity de cámara para capturar fotos
+     * Esta funcionalidad no interfiere con el flujo principal
+     */
+    private void openCameraActivity() {
+        AppLogger.navigation(TAG, "CameraActivity");
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+    }
+
     private void showWelcomeState() {
+        AppLogger.d(TAG, "Mostrando estado de bienvenida");
         if (welcomeStateLayout != null && emptyStateLayout != null) {
             welcomeStateLayout.setVisibility(LinearLayout.VISIBLE);
             emptyStateLayout.setVisibility(LinearLayout.GONE);
@@ -140,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showEmptyState() {
+        AppLogger.d(TAG, "Mostrando estado vacío");
         if (welcomeStateLayout != null && emptyStateLayout != null) {
             welcomeStateLayout.setVisibility(LinearLayout.GONE);
             emptyStateLayout.setVisibility(LinearLayout.VISIBLE);
@@ -165,10 +212,12 @@ public class MainActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         
         if (itemId == R.id.action_profile) {
+            AppLogger.navigation(TAG, "ProfileActivity");
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_location) {
+            AppLogger.navigation(TAG, "LocationActivity");
             Intent intent = new Intent(this, com.example.medialert.screens.location.LocationActivity.class);
             startActivity(intent);
             return true;
@@ -205,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
      * Realiza el logout de Firebase
      */
     private void performLogout() {
+        AppLogger.i(TAG, "Usuario cerrando sesión");
         if (mAuth != null) {
             mAuth.signOut();
             navigateToLogin();
@@ -215,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
      * Navega a LoginActivity
      */
     private void navigateToLogin() {
+        AppLogger.navigation(TAG, "LoginActivity");
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -224,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        AppLogger.lifecycle(TAG, "onStart");
         // Agregar listener de auth
         if (authStateListener != null) {
             mAuth.addAuthStateListener(authStateListener);
@@ -233,6 +285,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        AppLogger.lifecycle(TAG, "onStop");
         // Remover listener de auth
         if (authStateListener != null) {
             mAuth.removeAuthStateListener(authStateListener);
@@ -242,9 +295,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        AppLogger.lifecycle(TAG, "onDestroy");
         // Limpiar executor
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdown();
+            AppLogger.d(TAG, "ExecutorService cerrado");
         }
     }
 
@@ -253,31 +308,37 @@ public class MainActivity extends AppCompatActivity {
      */
     private void getUserLocation() {
         if (locationText == null) return;
+        AppLogger.d(TAG, "Obteniendo ubicación del usuario");
 
         // Verificar permisos
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) 
                 != PackageManager.PERMISSION_GRANTED) {
             // Solicitar permisos en runtime
+            AppLogger.w(TAG, "Permisos de ubicación no concedidos, solicitando");
             ActivityCompat.requestPermissions(this, 
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                                  Manifest.permission.ACCESS_FINE_LOCATION}, 
                     LOCATION_PERMISSION_REQUEST_CODE);
             return;
         }
+        AppLogger.d(TAG, "Permisos de ubicación concedidos");
 
         // Obtener última ubicación conocida (más rápido)
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
+                        AppLogger.i(TAG, "Ubicación obtenida: lat=" + location.getLatitude() + ", lon=" + location.getLongitude());
                         // Geocodificar en background thread
                         getCityFromLocation(location.getLatitude(), location.getLongitude());
                     } else {
                         // No hay última ubicación
+                        AppLogger.w(TAG, "No se pudo obtener última ubicación");
                         locationText.setText(R.string.main_location_unavailable);
                     }
                 })
                 .addOnFailureListener(e -> {
                     // Error al obtener ubicación
+                    AppLogger.e(TAG, "Error al obtener ubicación", e);
                     locationText.setText(R.string.main_location_unavailable);
                 });
     }
@@ -353,9 +414,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permiso concedido, intentar obtener ubicación nuevamente
+                AppLogger.i(TAG, "Permiso de ubicación concedido por el usuario");
                 getUserLocation();
             } else {
                 // Permiso denegado
+                AppLogger.w(TAG, "Permiso de ubicación denegado por el usuario");
                 if (locationText != null) {
                     locationText.setText(R.string.main_location_unavailable);
                 }

@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medialert.R;
+import com.example.medialert.utils.AppLogger;
 import com.example.medialert.utils.AuthUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
  * Activity para recuperación de contraseña con Firebase Authentication
  */
 public class ForgotPasswordActivity extends AppCompatActivity {
+
+    private static final String TAG = "ForgotPasswordActivity";
 
     // Firebase
     private FirebaseAuth mAuth;
@@ -35,10 +38,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLogger.lifecycle(TAG, "onCreate");
         setContentView(R.layout.activity_forgot_password);
 
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        AppLogger.d(TAG, "Firebase Auth inicializado");
 
         // Inicializar vistas
         initializeViews();

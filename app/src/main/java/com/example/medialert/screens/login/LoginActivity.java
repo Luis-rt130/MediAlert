@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.medialert.R;
 import com.example.medialert.screens.main.MainActivity;
+import com.example.medialert.utils.AppLogger;
 import com.example.medialert.utils.AuthUtils;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
  * Activity de inicio de sesión con Firebase Authentication
  */
 public class LoginActivity extends AppCompatActivity {
+
+    private static final String TAG = "LoginActivity";
 
     // Firebase
     private FirebaseAuth mAuth;
@@ -46,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLogger.lifecycle(TAG, "onCreate");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login_logo), (v, insets) -> {
@@ -56,14 +60,17 @@ public class LoginActivity extends AppCompatActivity {
 
         // Inicializar Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        AppLogger.d(TAG, "Firebase Auth inicializado");
 
         // Verificar si ya hay usuario logueado
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             // Usuario ya logueado, ir a MainActivity
+            AppLogger.i(TAG, "Usuario ya logueado: " + currentUser.getEmail());
             navigateToMain();
             return;
         }
+        AppLogger.d(TAG, "No hay usuario logueado, mostrando pantalla de login");
 
         // Inicializar vistas
         initializeViews();
@@ -92,11 +99,13 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> performLogin());
         
         forgotPasswordText.setOnClickListener(v -> {
+            AppLogger.userEvent("Forgot Password", "Usuario presionó olvidar contraseña");
             Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
             startActivity(intent);
         });
 
         registerText.setOnClickListener(v -> {
+            AppLogger.userEvent("Register", "Usuario presionó registrarse");
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
@@ -106,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
      * Realiza el login con Firebase
      */
     private void performLogin() {
+        AppLogger.userEvent("Login Attempt", "Usuario intenta iniciar sesión");
         // Limpiar errores previos
         emailLayout.setError(null);
         passwordLayout.setError(null);
@@ -117,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
         // Validar campos
         AuthUtils.ValidationResult validation = AuthUtils.validateLogin(email, password);
         if (!validation.isValid()) {
+            AppLogger.w(TAG, "Validación fallida: " + validation.getErrorMessage());
             showError(validation.getErrorMessage());
             if (!AuthUtils.isValidEmail(email)) {
                 emailLayout.setError(validation.getErrorMessage());
@@ -138,12 +149,14 @@ public class LoginActivity extends AppCompatActivity {
                         // Login exitoso
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
+                            AppLogger.i(TAG, "Login exitoso para: " + user.getEmail());
                             showSuccess("Bienvenido");
                             navigateToMain();
                         }
                     } else {
                         // Login fallido
                         String errorMessage = AuthUtils.getFirebaseErrorMessage(task.getException());
+                        AppLogger.e(TAG, "Login fallido: " + errorMessage, task.getException());
                         showError(errorMessage);
                         passwordLayout.setError(" "); // Espacio para mostrar error visual
                     }
@@ -154,6 +167,7 @@ public class LoginActivity extends AppCompatActivity {
      * Navega a MainActivity y limpia el stack
      */
     private void navigateToMain() {
+        AppLogger.navigation(TAG, "MainActivity");
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
