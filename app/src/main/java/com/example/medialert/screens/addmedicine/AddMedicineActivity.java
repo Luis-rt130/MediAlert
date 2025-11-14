@@ -2,10 +2,12 @@ package com.example.medialert.screens.addmedicine;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -16,7 +18,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.medialert.R;
+import com.example.medialert.models.Medicine;
 import com.example.medialert.utils.AppLogger;
+import com.example.medialert.utils.DatabaseManager;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
@@ -31,6 +35,10 @@ public class AddMedicineActivity extends AppCompatActivity {
     private ImageButton backButton;
     private Button saveButton;
     private Button cancelButton;
+    private ProgressBar progressBar;
+    
+    private DatabaseManager databaseManager;
+    private Medicine medicineToEdit; // Para modo edición
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,16 @@ public class AddMedicineActivity extends AppCompatActivity {
         backButton = findViewById(R.id.button_back);
         saveButton = findViewById(R.id.button_save);
         cancelButton = findViewById(R.id.button_cancel);
+        progressBar = findViewById(R.id.progress_bar);
+
+        // Inicializar DatabaseManager
+        databaseManager = DatabaseManager.getInstance();
+        
+        // Verificar si se está editando un medicamento
+        String medicineId = getIntent().getStringExtra("medicine_id");
+        if (medicineId != null) {
+            loadMedicineForEdit(medicineId);
+        }
 
         setupFrequencyDropdown();
         setupTimePicker();
@@ -90,14 +108,124 @@ public class AddMedicineActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
             // Validar campos antes de guardar
             if (validateFields()) {
-                // Mostrar toast de confirmación
-                Toast.makeText(this, "Medicamento guardado exitosamente", Toast.LENGTH_SHORT).show();
+                saveMedicine();
+            }
+        });
+    }
+    
+    /**
+     * Carga un medicamento para edición
+     */
+    private void loadMedicineForEdit(String medicineId) {
+        showProgress(true);
+        databaseManager.getMedicineById(medicineId, new DatabaseManager.OnCompleteListener<Medicine>() {
+            @Override
+            public void onSuccess(Medicine medicine) {
+                medicineToEdit = medicine;
+                // Llenar los campos con los datos del medicamento
+                TextInputEditText nameEditText = findViewById(R.id.edit_medicine_name);
+                TextInputEditText doseEditText = findViewById(R.id.edit_medicine_dose);
                 
-                // TODO: Aquí se implementaría la lógica para guardar en base de datos
-                // Por ahora, solo regresamos a la pantalla anterior
+                if (nameEditText != null) nameEditText.setText(medicine.getName());
+                if (doseEditText != null) doseEditText.setText(medicine.getDose());
+                if (timeEditText != null) timeEditText.setText(medicine.getTime());
+                if (frequencyEditText != null) frequencyEditText.setText(medicine.getFrequency());
+                
+                showProgress(false);
+            }
+            
+            @Override
+            public void onFailure(Exception e) {
+                showProgress(false);
+                Toast.makeText(AddMedicineActivity.this, 
+                    "Error al cargar medicamento: " + e.getMessage(), 
+                    Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
+    }
+    
+    /**
+     * Guarda el medicamento en Firestore
+     */
+    private void saveMedicine() {
+        // Obtener valores de los campos
+        TextInputEditText nameEditText = findViewById(R.id.edit_medicine_name);
+        TextInputEditText doseEditText = findViewById(R.id.edit_medicine_dose);
+        
+        String name = nameEditText.getText().toString().trim();
+        String dose = doseEditText.getText().toString().trim();
+        String time = timeEditText.getText().toString().trim();
+        String frequency = frequencyEditText.getText().toString().trim();
+        
+        showProgress(true);
+        saveButton.setEnabled(false);
+        
+        if (medicineToEdit != null) {
+            // Modo edición: actualizar medicamento existente
+            medicineToEdit.setName(name);
+            medicineToEdit.setDose(dose);
+            medicineToEdit.setTime(time);
+            medicineToEdit.setFrequency(frequency);
+            
+            databaseManager.updateMedicine(medicineToEdit, new DatabaseManager.OnCompleteListener<Medicine>() {
+                @Override
+                public void onSuccess(Medicine medicine) {
+                    showProgress(false);
+                    saveButton.setEnabled(true);
+                    Toast.makeText(AddMedicineActivity.this, 
+                        "Medicamento actualizado exitosamente", 
+                        Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                }
+                
+                @Override
+                public void onFailure(Exception e) {
+                    showProgress(false);
+                    saveButton.setEnabled(true);
+                    Toast.makeText(AddMedicineActivity.this, 
+                        "Error al actualizar: " + e.getMessage(), 
+                        Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            // Modo creación: agregar nuevo medicamento
+            Medicine medicine = new Medicine(null, name, dose, time, frequency, null);
+            
+            databaseManager.addMedicine(medicine, new DatabaseManager.OnCompleteListener<Medicine>() {
+                @Override
+                public void onSuccess(Medicine savedMedicine) {
+                    showProgress(false);
+                    saveButton.setEnabled(true);
+                    Toast.makeText(AddMedicineActivity.this, 
+                        "Medicamento guardado exitosamente", 
+                        Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                }
+                
+                @Override
+                public void onFailure(Exception e) {
+                    showProgress(false);
+                    saveButton.setEnabled(true);
+                    Toast.makeText(AddMedicineActivity.this, 
+                        "Error al guardar: " + e.getMessage(), 
+                        Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+    
+    /**
+     * Muestra u oculta el indicador de progreso
+     */
+    private void showProgress(boolean show) {
+        if (progressBar != null) {
+            progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+        saveButton.setEnabled(!show);
+        cancelButton.setEnabled(!show);
     }
 
     private void setupCancelButton() {
@@ -146,3 +274,4 @@ public class AddMedicineActivity extends AppCompatActivity {
         return true;
     }
 }
+

@@ -17,15 +17,21 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medialert.R;
+import com.example.medialert.adapters.MedicineAdapter;
+import com.example.medialert.models.Medicine;
 import com.example.medialert.screens.addmedicine.AddMedicineActivity;
 import com.example.medialert.screens.camera.CameraActivity;
 import com.example.medialert.screens.login.LoginActivity;
 import com.example.medialert.screens.profile.ProfileActivity;
 import com.example.medialert.utils.AppLogger;
+import com.example.medialert.utils.DatabaseManager;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -61,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private FloatingActionButton fabLogout;
     private FloatingActionButton fabCamera;
+    
+    // Medicine List
+    private RecyclerView recyclerViewMedicines;
+    private MedicineAdapter medicineAdapter;
+    private DatabaseManager databaseManager;
+    private static final int REQUEST_CODE_ADD_MEDICINE = 1002; // Cambiado para evitar conflicto con LOCATION_PERMISSION
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         // Configurar listener de estado de autenticación
         setupAuthStateListener();
 
+        // Inicializar DatabaseManager
+        databaseManager = DatabaseManager.getInstance();
+        
         // Inicializar location client y executor
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         executorService = Executors.newSingleThreadExecutor();
@@ -103,11 +118,15 @@ public class MainActivity extends AppCompatActivity {
             welcomeStateLayout = findViewById(R.id.welcome_state_layout);
             emptyStateLayout = findViewById(R.id.empty_state_layout);
             fab = findViewById(R.id.fab_add_medicine);
+            recyclerViewMedicines = findViewById(R.id.recycler_view_medicines);
+
+            // Configurar RecyclerView
+            setupRecyclerView();
 
             fab.setOnClickListener(view -> {
                 AppLogger.userEvent("FAB Add Medicine", "Usuario presionó botón agregar medicamento");
                 Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_ADD_MEDICINE);
             });
 
             // Configurar botón de logout
@@ -136,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
 
             // Obtener ubicación
             getUserLocation();
+            
+            // Cargar medicamentos
+            loadMedicines();
 
         } catch (Exception e) {
             // Si hay error con los layouts, continuar sin ellos
@@ -143,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
             if (fab != null) {
                 fab.setOnClickListener(view -> {
                     Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_CODE_ADD_MEDICINE);
                 });
             }
             
@@ -164,7 +186,111 @@ public class MainActivity extends AppCompatActivity {
                     openCameraActivity();
                 });
             }
+            
+            // Configurar RecyclerView si está disponible
+            recyclerViewMedicines = findViewById(R.id.recycler_view_medicines);
+            if (recyclerViewMedicines != null) {
+                setupRecyclerView();
+                loadMedicines();
+            }
         }
+    }
+    
+    /**
+     * Configura el RecyclerView para mostrar los medicamentos
+     */
+    private void setupRecyclerView() {
+        if (recyclerViewMedicines == null) return;
+        
+        medicineAdapter = new MedicineAdapter();
+        recyclerViewMedicines.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewMedicines.setAdapter(medicineAdapter);
+        
+        // Configurar click listener para editar
+        medicineAdapter.setOnMedicineClickListener(medicine -> {
+            Intent intent = new Intent(MainActivity.this, AddMedicineActivity.class);
+            intent.putExtra("medicine_id", medicine.getId());
+            startActivityForResult(intent, REQUEST_CODE_ADD_MEDICINE);
+        });
+        
+        // Configurar long click listener para eliminar
+        medicineAdapter.setOnMedicineLongClickListener(medicine -> {
+            showDeleteMedicineDialog(medicine);
+            return;
+        });
+    }
+    
+    /**
+     * Carga los medicamentos desde Firestore
+     */
+    private void loadMedicines() {
+        databaseManager.getMedicines(new DatabaseManager.OnCompleteListener<List<Medicine>>() {
+            @Override
+            public void onSuccess(List<Medicine> medicines) {
+                if (medicineAdapter != null) {
+                    medicineAdapter.updateMedicines(medicines);
+                }
+                updateUIState(medicines != null && !medicines.isEmpty());
+            }
+            
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(MainActivity.this, 
+                    "Error al cargar medicamentos: " + e.getMessage(), 
+                    Toast.LENGTH_SHORT).show();
+                updateUIState(false);
+            }
+        });
+    }
+    
+    /**
+     * Actualiza el estado de la UI según si hay medicamentos o no
+     */
+    private void updateUIState(boolean hasMedicines) {
+        if (hasMedicines) {
+            showMedicineList();
+        } else {
+            // Verificar si es la primera vez (sin medicamentos previos)
+            if (medicineAdapter == null || medicineAdapter.getItemCount() == 0) {
+                showWelcomeState();
+            } else {
+                showEmptyState();
+            }
+        }
+    }
+    
+    /**
+     * Muestra el diálogo de confirmación para eliminar un medicamento
+     */
+    private void showDeleteMedicineDialog(Medicine medicine) {
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar medicamento")
+                .setMessage("¿Estás seguro de que deseas eliminar " + medicine.getName() + "?")
+                .setPositiveButton("Eliminar", (dialog, which) -> deleteMedicine(medicine))
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+    
+    /**
+     * Elimina un medicamento
+     */
+    private void deleteMedicine(Medicine medicine) {
+        databaseManager.deleteMedicine(medicine.getId(), new DatabaseManager.OnCompleteListener<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                Toast.makeText(MainActivity.this, 
+                    "Medicamento eliminado", 
+                    Toast.LENGTH_SHORT).show();
+                loadMedicines(); // Recargar lista
+            }
+            
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(MainActivity.this, 
+                    "Error al eliminar: " + e.getMessage(), 
+                    Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -179,26 +305,40 @@ public class MainActivity extends AppCompatActivity {
 
     private void showWelcomeState() {
         AppLogger.d(TAG, "Mostrando estado de bienvenida");
-        if (welcomeStateLayout != null && emptyStateLayout != null) {
+        if (welcomeStateLayout != null) {
             welcomeStateLayout.setVisibility(LinearLayout.VISIBLE);
+        }
+        if (emptyStateLayout != null) {
             emptyStateLayout.setVisibility(LinearLayout.GONE);
+        }
+        if (recyclerViewMedicines != null) {
+            recyclerViewMedicines.setVisibility(View.GONE);
         }
     }
 
     private void showEmptyState() {
         AppLogger.d(TAG, "Mostrando estado vacío");
-        if (welcomeStateLayout != null && emptyStateLayout != null) {
+        if (welcomeStateLayout != null) {
             welcomeStateLayout.setVisibility(LinearLayout.GONE);
+        }
+        if (emptyStateLayout != null) {
             emptyStateLayout.setVisibility(LinearLayout.VISIBLE);
+        }
+        if (recyclerViewMedicines != null) {
+            recyclerViewMedicines.setVisibility(View.GONE);
         }
     }
 
     private void showMedicineList() {
-        if (welcomeStateLayout != null && emptyStateLayout != null) {
+        if (welcomeStateLayout != null) {
             welcomeStateLayout.setVisibility(LinearLayout.GONE);
+        }
+        if (emptyStateLayout != null) {
             emptyStateLayout.setVisibility(LinearLayout.GONE);
         }
-        // TODO: Mostrar RecyclerView con medicamentos
+        if (recyclerViewMedicines != null) {
+            recyclerViewMedicines.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -279,6 +419,19 @@ public class MainActivity extends AppCompatActivity {
         // Agregar listener de auth
         if (authStateListener != null) {
             mAuth.addAuthStateListener(authStateListener);
+        }
+        // Recargar medicamentos cuando la actividad se reanuda
+        if (databaseManager != null) {
+            loadMedicines();
+        }
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_ADD_MEDICINE && resultCode == RESULT_OK) {
+            // Recargar medicamentos después de agregar/editar
+            loadMedicines();
         }
     }
 
@@ -426,3 +579,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+

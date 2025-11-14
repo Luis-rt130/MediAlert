@@ -20,48 +20,21 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- This RecyclerView is for the real application. It's hidden in the preview -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_medicines"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:visibility="gone" />
-
-    <!-- This LinearLayout is ONLY for the design preview to show varied items -->
+    <!-- Header estático: ubicación + logo (siempre visible) -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:visibility="visible">
-
-        <include layout="@layout/item_preview_losartan" />
-        <include layout="@layout/item_preview_ibuprofeno" />
-        <include layout="@layout/item_preview_paracetamol" />
-
-    </LinearLayout>
-
-
-    <!-- Welcome State Layout -->
-    <LinearLayout
-        android:id="@+id/welcome_state_layout"
+        android:id="@+id/header_static"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:visibility="visible"
-        tools:visibility="visible">
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- Location Card -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/location_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="12dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
             app:cardBackgroundColor="?attr/colorSurfaceVariant"
@@ -112,12 +85,56 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Logo -->
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="Bienvenido a MediAlert"
-            android:src="@drawable/medialertp_m_"
-            android:layout_marginBottom="24dp" />
+            android:id="@+id/header_logo"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="MediAlert"
+            android:src="@drawable/medialertp_m_" />
+
+    </LinearLayout>
+
+    <!-- This RecyclerView is for the real application. It's hidden in the preview -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_medicines"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="160dp"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:visibility="gone" />
+
+    <!-- This LinearLayout is ONLY for the design preview to show varied items -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:visibility="visible">
+
+        <include layout="@layout/item_preview_losartan" />
+        <include layout="@layout/item_preview_ibuprofeno" />
+        <include layout="@layout/item_preview_paracetamol" />
+
+    </LinearLayout>
+
+
+    <!-- Welcome State Layout -->
+    <LinearLayout
+        android:id="@+id/welcome_state_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="visible"
+        tools:visibility="visible">
+
+        <!-- Header (ubicación + logo) movido a header_static para que no desaparezca -->
 
         <TextView
             android:layout_width="wrap_content"
@@ -129,13 +146,13 @@
             android:layout_marginBottom="16dp" />
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="299dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="24dp"
             android:text="Tu asistente personal para recordarte tomar tus medicamentos a tiempo."
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceBody1"
-            android:textColor="?android:attr/textColorSecondary"
-            android:layout_marginBottom="24dp" />
+            android:textColor="?android:attr/textColorSecondary" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"

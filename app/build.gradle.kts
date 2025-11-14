@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     
@@ -45,6 +46,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
