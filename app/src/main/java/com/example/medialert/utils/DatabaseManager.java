@@ -278,6 +278,7 @@ public class DatabaseManager {
         if (medicine.getDose() != null) updates.put("dose", medicine.getDose());
         if (medicine.getTime() != null) updates.put("time", medicine.getTime());
         if (medicine.getFrequency() != null) updates.put("frequency", medicine.getFrequency());
+        if (medicine.getPhotoUrl() != null) updates.put("photoUrl", medicine.getPhotoUrl());
         updates.put("isActive", medicine.isActive());
 
         medicineRef.update(updates)

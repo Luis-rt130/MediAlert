@@ -3,13 +3,17 @@ package com.example.medialert.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.medialert.R;
 import com.example.medialert.models.Medicine;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,12 +124,18 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
         private TextView nameTextView;
         private TextView detailsTextView;
         private TextView timeTextView;
+        private ImageView iconMedicine;
+        private MaterialCardView cardMedicinePhoto;
+        private ImageView imageMedicinePhoto;
 
         MedicineViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.text_view_medicine_name);
             detailsTextView = itemView.findViewById(R.id.text_view_medicine_details);
             timeTextView = itemView.findViewById(R.id.text_view_medicine_time);
+            iconMedicine = itemView.findViewById(R.id.icon_medicine);
+            cardMedicinePhoto = itemView.findViewById(R.id.card_medicine_photo);
+            imageMedicinePhoto = itemView.findViewById(R.id.image_medicine_photo);
 
             // Configurar click listener
             itemView.setOnClickListener(v -> {
@@ -173,6 +183,26 @@ public class MedicineAdapter extends RecyclerView.Adapter<MedicineAdapter.Medici
                 timeTextView.setText(time);
             } else {
                 timeTextView.setText("");
+            }
+            
+            // Foto del medicamento
+            if (medicine.getPhotoUrl() != null && !medicine.getPhotoUrl().isEmpty()) {
+                // Mostrar foto circular
+                cardMedicinePhoto.setVisibility(View.VISIBLE);
+                iconMedicine.setVisibility(View.GONE);
+                
+                // Cargar imagen con Glide
+                Glide.with(itemView.getContext())
+                        .load(medicine.getPhotoUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .error(android.R.drawable.ic_menu_gallery)
+                        .centerCrop()
+                        .into(imageMedicinePhoto);
+            } else {
+                // Mostrar icono por defecto
+                cardMedicinePhoto.setVisibility(View.GONE);
+                iconMedicine.setVisibility(View.VISIBLE);
             }
         }
     }

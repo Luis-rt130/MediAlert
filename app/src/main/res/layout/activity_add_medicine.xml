@@ -115,12 +115,87 @@
             android:contentDescription="@string/tooltip_frequency_dropdown"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Sección de foto -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_photo_section"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:strokeWidth="1dp"
+        app:strokeColor="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/layout_medicine_frequency"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Foto del medicamento (opcional)"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+            <ImageView
+                android:id="@+id/image_medicine_preview"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:background="@android:color/darker_gray"
+                android:visibility="gone"
+                android:contentDescription="Vista previa de la foto del medicamento"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_take_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tomar Foto"
+                    android:textSize="14sp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:icon="@android:drawable/ic_menu_camera"
+                    app:iconGravity="start"
+                    android:layout_marginEnd="4dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button_remove_photo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Quitar Foto"
+                    android:textSize="14sp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    app:icon="@android:drawable/ic_menu_delete"
+                    app:iconGravity="start"
+                    android:visibility="gone"
+                    android:layout_marginStart="4dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/card_photo_section"
         app:layout_constraintBottom_toTopOf="@id/button_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

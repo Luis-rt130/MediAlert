@@ -16,6 +16,29 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Foto del medicamento (circular, thumbnail pequeño) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_medicine_photo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="?attr/colorPrimary"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/image_medicine_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Foto del medicamento"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Icono de medicamento (por defecto cuando no hay foto) -->
         <ImageView
             android:id="@+id/icon_medicine"
             android:layout_width="40dp"

@@ -13,6 +13,7 @@ public class Medicine {
     private String time;
     private String frequency;
     private String userId;
+    private String photoUrl;
     private long createdAt;
     private boolean isActive;
 
@@ -28,6 +29,20 @@ public class Medicine {
         this.time = time;
         this.frequency = frequency;
         this.userId = userId;
+        this.photoUrl = null;
+        this.createdAt = System.currentTimeMillis();
+        this.isActive = true;
+    }
+
+    // Constructor con foto
+    public Medicine(String id, String name, String dose, String time, String frequency, String userId, String photoUrl) {
+        this.id = id;
+        this.name = name;
+        this.dose = dose;
+        this.time = time;
+        this.frequency = frequency;
+        this.userId = userId;
+        this.photoUrl = photoUrl;
         this.createdAt = System.currentTimeMillis();
         this.isActive = true;
     }
@@ -97,6 +112,14 @@ public class Medicine {
         isActive = active;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
     /**
      * Convierte el objeto a un Map para Firestore
      */
@@ -108,6 +131,7 @@ public class Medicine {
         if (time != null) map.put("time", time);
         if (frequency != null) map.put("frequency", frequency);
         if (userId != null) map.put("userId", userId);
+        if (photoUrl != null) map.put("photoUrl", photoUrl);
         map.put("createdAt", createdAt);
         map.put("isActive", isActive);
         return map;
@@ -122,6 +146,7 @@ public class Medicine {
                 ", time='" + time + '\'' +
                 ", frequency='" + frequency + '\'' +
                 ", userId='" + userId + '\'' +
+                ", photoUrl='" + photoUrl + '\'' +
                 ", createdAt=" + createdAt +
                 ", isActive=" + isActive +
                 '}';
