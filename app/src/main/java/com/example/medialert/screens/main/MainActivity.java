@@ -1,4 +1,4 @@
-package com.example.medialert.screens.main;
+package com.example.medialert;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
